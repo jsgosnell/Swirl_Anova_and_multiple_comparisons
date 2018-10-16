@@ -1,0 +1,118 @@
+- Class: meta
+  Course: Swirl_Anova_and_multiple_comparisons
+  Lesson: ANOVAs and multiple comparisons
+  Author: J. Stephen Gosnell
+  Type: Standard
+  Organization: Baruch College, City University of New York
+  Version: 2.4.3
+
+- Class: text
+  Output: Welcome to Swirl! This interface will help review some of the code we've used in class.
+
+- Class: text
+  Output: Today we'll review how to conduct ANOVA's and relevant post-hoc tests.  There are many ways to do this in R, but we'll focus on using the lm command.
+
+- Class: text
+  Output: Let's focus on sepal width from the iris dataset (built into R).  Data on iris (a flower) measurements, including sepal width, was collected from 3 populations. In order to consider if sepal width differs between populations, we need to use an ANOVA (analysis of variance).  This is like the t-test we learned earlier in class but with more than 2 groups.
+
+- Class: mult_question
+  Output: What is our null hypothesis (Ho)?
+  AnswerChoices: sepal width does not differ among groups;sepal width does differ among groups; I'm not sure
+  CorrectAnswer: sepal width does not differ among groups
+  AnswerTests: omnitest(correctVal='sepal width does not differ among groups')
+  Hint: Remember, a null hypothesis is a hypothesis of no difference!
+
+- Class: text
+  Output: To test this hypothesis, we use an ANOVA. The function we are going to use to conduct ANOVAs is lm, which stands for linear model. ANOVAs, t-tests, and regression/correlation (coming up!) are all linear models, so this single function can be used to for them all.
+
+- Class: cmd_question
+  Output: Sepal width is found the built-in iris data set. Use the head command to inspect the dataset.
+  CorrectAnswer: head(iris)
+  AnswerTests: omnitest(correctExpr='head(iris)')
+  Hint: Try head(iris)
+
+- Class: cmd_question
+  Output: Notice the sepal width column is named Sepal.Width and our populations are in a column labelled Species. The required arguments for the lm function include a formula (what ~ (explained) by what) and the data).  Save the lm function output to an object called sepal_width_anova
+  CorrectAnswer: sepal_width_anova <- lm(Sepal.Width ~ Species, iris)
+  AnswerTests: omnitest(correctExpr='sepal_width_anova <- lm(Sepal.Width ~ Species, iris)')
+  Hint: Try sepal_width_anova <- lm(Sepal.Width ~ Species, iris).
+
+- Class: cmd_question
+  Output: Before we analyze results of any test, we need to make sure the data are appropriate for the test (our assumptions are met). For any linear model, the assumptions are that the error terms (the noise around the model fit for each point) are independent, identically distributed, and follow a normal distribution.  You can visually check this by plotting your lm object. Try plot(sepal_width_anova).  This will return four plot that you'll need to press enter to see. 
+  CorrectAnswer: plot(sepal_width_anova)
+  AnswerTests: omnitest(correctExpr='plot(sepal_width_anova)')
+  Hint: Try plot(sepal_width_anova).
+
+- Class: text
+  Output: The four plots help us make sure our data fits our assumptions.  The first (residuals vs fitted) should show no pattern. Stacks of data are ok/expected, since the ANOVA is estimating one average width for each species, but you shouldn't see one stack that is much more/less spread out.  The red line should be fairly straight!  The second graph is a normal qq plot of the residuals - they should fall along the line!  R automatically marks the three points with the largest standardized residuals. Not usually important, but if these points are way off the line you may want to check for typos in the data.  The third plot is another type of residual (studentized by default) vs fit; just check for any structure and red line being flat.  The 4th plot considers leverage (is a data point really impacting the model fit). Look for points that occur outside the dashed red Cook Distance lines (this may not exist if no high leverage points are present).
+
+- Class: cmd_question
+  Output: It looks like all our assumption were met. To get our results, use the summary function on the lm object you created.
+  CorrectAnswer: summary(sepal_width_anova)
+  AnswerTests: omnitest(correctExpr='summary(sepal_width_anova)')
+  Hint: Try summary(sepal_width_anova).
+
+- Class: cmd_question
+  Output: This give us output and a p-value in the lower right corner, but its odd in that it gives estimates and t-values for each species.  You can use the Anova command from the car package to get an overall p-value to determine if width differs among species. Downloand and load the car package, then use the Anova command. It needs the model you created, and you should get in the habit of specifying type=III for the residuals argument(though it doesn't matter here). 
+  CorrectAnswer: Anova(sepal_width_anova, type = "III")
+  AnswerTests: omnitest(correctExpr='Anova(sepal_width_anova, type = "III")')
+  Hint: Try Anova(sepal_width_anova, type = "III").
+
+- Class: mult_question
+  Output: Now you can see the p-value associated with species. How do you interpret it?
+  AnswerChoices: reject H0; fail to reject H0; I'm not sure
+  CorrectAnswer: reject H0
+  AnswerTests: omnitest(correctVal='reject H0')
+  Hint: Remember, if our p-value is below .05 we typically reject the null hypothesis.
+
+- Class: text
+  Output: So we now believe there is a difference in sepal width among the populations,but we don't know where! All the populations could be different from each other, or only one might differ from the others.  We consider these outcomes using post-hoc tests.  We ONLY do these if we get a significant overall p-value from the ANOVA!
+
+- Class: cmd_question
+  Output: We'll carry out post-hoc tests using the multcomp package.  Require it, then use the glht function. It requires the model you created plus a list of tests you want to run, and you need to save the output as an object. For now, let's just Tukey tests, which tests every possible combination of groups against each other. Try species _comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey"))
+  CorrectAnswer: species _comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey")
+  AnswerTests: omnitest(correctExpr='species_comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey"))')
+  Hint: Try species_comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey"))
+
+- Class: cmd_question
+  Output: Now use the summary command to see the output.
+  CorrectAnswer: summary(species_comparisons)
+  AnswerTests: omnitest(correctExpr='summary(species_comparisons)')
+  Hint: Try summary(species_comparisons).
+
+- Class: mult_question
+  Output: Now you can see the comparisons among all groups (with the overall error rate controlled!).  What do our results show?
+  AnswerChoices: all populations differ from each other; only virginica is different; only setosa is different; only versicolor is different
+  CorrectAnswer: all populations differ from each other
+  AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
+  Hint: Look at the p-values for each comparison!
+
+- Class: cmd_question
+  Output: Note there are non-parametric and bootstrap options for ANOVA's. For the non-parametric version (the Kruskal-Wallis test, which ranks the data and then does analysis on the ranks), we use the kruskal.test function. The arguments are just like the lm function. Try it now (don't save as an object).
+  CorrectAnswer: kruskal.test(Sepal.Width~species, iris)
+  AnswerTests: omnitest(correctExpr='kruskal.test(Sepal.Width~species, iris)')
+  Hint: Try kruskal.test(Sepal.Width~species, iris).
+
+- Class: cmd_question
+  Output: To do post-hoc tests for significant results following the Kruskal-Wallis test, you'll need to use the pairwise.wilcox.test function, which requires the measured data, the group data, and the type of method you want to use to control the family-wise error rate. Try pairwise.wilcox.test(iris$Sepal.Width, iris$Species, p.adjust.method = "holm"). This uses the sequential Bonferroni method to control for multiple test.
+  CorrectAnswer: pairwise.wilcox.test(iris$Sepal.Width, iris$Species, p.adjust.method = "holm")
+  AnswerTests: omnitest(correctExpr='pairwise.wilcox.test(iris$Sepal.Width, iris$Species, p.adjust.method = "holm")')
+  Hint: Try pairwise.wilcox.test(iris$Sepal.Width, iris$Species, p.adjust.method = "holm").
+
+- Class: text
+  Output: The resulting matrix shows p-values for each comparison.
+
+- Class: cmd_question
+  Output: Finally, the bootstrap option uses the t1waybt function from the WRS2 package. The arguments are also the same as lm. Instal and load the package, then try it. 
+  CorrectAnswer: t1waybt(Sepal.Width ~ Species, iris)
+  AnswerTests: omnitest(correctExpr='t1waybt(Sepal.Width ~ Species, iris)')
+  Hint: Try t1waybt(Sepal.Width ~ Species, iris).
+
+- Class: cmd_question
+  Output: For post-hoc tests, use the lincon function. It needs the same arguments as t1waybt.
+  CorrectAnswer: lincon(Sepal.Width ~ Species, iris)
+  AnswerTests: omnitest(correctExpr='lincon(Sepal.Width ~ Species, iris)')
+  Hint: Try lincon(Sepal.Width ~ Species, iris).
+
+- Class: text
+  Output: This concludes our ANOVA review. 
