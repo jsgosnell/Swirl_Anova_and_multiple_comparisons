@@ -84,7 +84,7 @@
   Output: Now you can see the comparisons among all groups (with the overall error rate controlled!).  What do our results show?
   AnswerChoices: all populations differ from each other; only virginica is different; only setosa is different; only versicolor is different
   CorrectAnswer: all populations differ from each other
-  AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
+  AnswerTests: omnitest(correctVal='all populations differ from each other')
   Hint: Look at the p-values for each comparison!
 
 - Class: cmd_question
