@@ -69,8 +69,8 @@
   Output: So we now believe there is a difference in sepal width among the populations,but we don't know where! All the populations could be different from each other, or only one might differ from the others.  We consider these outcomes using post-hoc tests.  We ONLY do these if we get a significant overall p-value from the ANOVA!
 
 - Class: cmd_question
-  Output: We'll carry out post-hoc tests using the multcomp package.  Require it, then use the glht function. It requires the model you created plus a list of tests you want to run, and you need to save the output as an object. For now, let's just Tukey tests, which tests every possible combination of groups against each other. Try species _comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey"))
-  CorrectAnswer: species _comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey")
+  Output: We'll carry out post-hoc tests using the multcomp package.  Require it, then use the glht function. It requires the model you created plus a list of tests you want to run, and you need to save the output as an object. For now, let's just Tukey tests, which tests every possible combination of groups against each other. Try species_comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey"))
+  CorrectAnswer: species_comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey")
   AnswerTests: omnitest(correctExpr='species_comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey"))')
   Hint: Try species_comparisons <- glht(sepal_width_anova, linfct = mcp(Species = "Tukey"))
 
