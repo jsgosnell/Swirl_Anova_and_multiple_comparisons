@@ -89,9 +89,9 @@
 
 - Class: cmd_question
   Output: Note there are non-parametric and bootstrap options for ANOVA's. For the non-parametric version (the Kruskal-Wallis test, which ranks the data and then does analysis on the ranks), we use the kruskal.test function. The arguments are just like the lm function. Try it now (don't save as an object).
-  CorrectAnswer: kruskal.test(Sepal.Width~species, iris)
-  AnswerTests: omnitest(correctExpr='kruskal.test(Sepal.Width~species, iris)')
-  Hint: Try kruskal.test(Sepal.Width~species, iris).
+  CorrectAnswer: kruskal.test(Sepal.Width~Species, iris)
+  AnswerTests: omnitest(correctExpr='kruskal.test(Sepal.Width~Species, iris)')
+  Hint: Try kruskal.test(Sepal.Width~Species, iris).
 
 - Class: cmd_question
   Output: To do post-hoc tests for significant results following the Kruskal-Wallis test, you'll need to use the pairwise.wilcox.test function, which requires the measured data, the group data, and the type of method you want to use to control the family-wise error rate. Try pairwise.wilcox.test(iris$Sepal.Width, iris$Species, p.adjust.method = "holm"). This uses the sequential Bonferroni method to control for multiple test.
