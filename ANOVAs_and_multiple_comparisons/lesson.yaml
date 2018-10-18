@@ -103,7 +103,7 @@
   Output: The resulting matrix shows p-values for each comparison.
 
 - Class: cmd_question
-  Output: Finally, the bootstrap option uses the t1waybt function from the WRS2 package. The arguments are also the same as lm. Instal and load the package, then try it. 
+  Output: Finally, the bootstrap option uses the t1waybt function from the WRS2 package. The arguments are also the same as lm. Install and load the package, then try it. 
   CorrectAnswer: t1waybt(Sepal.Width ~ Species, iris)
   AnswerTests: omnitest(correctExpr='t1waybt(Sepal.Width ~ Species, iris)')
   Hint: Try t1waybt(Sepal.Width ~ Species, iris).
